@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct golpe
 {
@@ -21,24 +22,28 @@ typedef struct treinador
     pokemon *pokebolas;
 } treinador;
 
-void Menu_inicial(int *res,int *bandeira);
+void Menu_inicial(int *res, int *bandeira);
 void Novo_jogo(treinador *jogador);
 void InicializarPokemon(pokemon *pokemon, int num);
 void Rodar_dialogo(char *dialogo);
 void TestarResposta(int *res, int *bandeira);
-void PrintarValorInt(int valor,char NomeVar);
+void PrintarValorInt(int valor, char *NomeVar);
+void Eventos(int bandeira);
 
 int main()
 {
     int res, bandeira, numpoq;
     res = bandeira = 0;
     treinador jogador, rival;
-    InicializarPokemon(jogador.pokebolas, numpoq);
-    menu_inicial(&res,&bandeira);
-    TestarResposta(&res,&bandeira);
+    //jogador.pokebolas = malloc(sizeof(pokemon)); // Allocate memory for pokebolas
+    //InicializarPokemon(jogador.pokebolas, numpoq);
+    Menu_inicial(&res, &bandeira);
+    TestarResposta(&res, &bandeira);
+    //free(jogador.pokebolas); // Free allocated memory
+    return 0;
 }
 
-void Menu_inicial(int *res,int *bandeira)
+void Menu_inicial(int *res, int *bandeira)
 {
     printf("------------------------------------------------------------------------------------------------------------------");
     printf("\nJogo de Pokemon\n");
@@ -48,8 +53,8 @@ void Menu_inicial(int *res,int *bandeira)
     printf("\n[3] - Sair do Jogo\n");
     printf("------------------------------------------------------------------------------------------------------------------");
     printf("\nEscreva sua resposta:\n");
-    scanf("%d", &res);
-    TestarResposta(&res,&bandeira);
+    scanf("%d", res);              // No need to pass address, res is already a pointer
+    TestarResposta(res, bandeira); // No need to pass address, res and bandeira are already pointers
 }
 
 void Novo_jogo(treinador *jogador)
@@ -63,54 +68,55 @@ void InicializarPokemon(pokemon *pokemon, int num)
 {
     if (num == 1)
     {
-        strcpy(pokemon->nome,"Chamander");
+        strcpy(pokemon->nome, "Chamander");
         pokemon->nivel = 0;
         pokemon->exp = 0;
     }
 }
 
-void Rodar_dialogo(char *dialogo){
+void Rodar_dialogo(char *dialogo)
+{
     int rodar;
-    printf("%s\n",*dialogo);
-    printf("Clique qualquer tecla para passar para o proximo dialogo\n");
-    scanf("",&rodar);
+    printf("%s\n", dialogo); // No need to dereference dialogo
+    printf("Clique qualquer tecla para passar para o próximo diálogo\n");
+    scanf("%d", &rodar); // Assuming you want to read an integer
 }
 
-void TestarResposta(int *res, int *bandeira){
-    if(bandeira == 0){
-        if (res == 1)
+void TestarResposta(int *res, int *bandeira)
+{
+    if (*bandeira == 0)
+    { // Dereference banderia and res
+        if (*res == 1)
         {
-            bandeira = 1;
-            PrintarValorInt(bandeira,"bandeira");
+            *bandeira = 1;
+            PrintarValorInt(*bandeira, "bandeira"); // Dereference banderia
         }
     }
-    else{
-        if (bandeira == 1)
-        {
-            if (res == 1)
+    else
+    {
+        if (*bandeira == 1)
+        { // Dereference banderia and res
+            if (*res == 1)
             {
                 printf("Inicio do jogo\n");
             }
+            else if (*res == 2)
+            { // Corrected the condition
+                printf("Parte do código ainda não escrita\n");
+            }
             else
             {
-                if (res == 2)
-                {
-                    printf("Parte do codigo ainda não escrita");
-                }
-                else
-                {
-                    printf("Parte do codigo ainda não escita");
-                }
+                printf("Parte do código ainda não escrita\n");
             }
         }
         else
         {
-            printf("Essa parte do codigo ainda não foi escrita\n");
+            printf("Essa parte do código ainda não foi escrita\n");
         }
     }
-    
 }
 
-void PrintarValorInt(int valor, char NomeVar){
-    printf("\nA %s vale: %d\n",NomeVar,valor);
+void PrintarValorInt(int valor, char *NomeVar)
+{ // Corrected the second argument type
+    printf("\nA %s vale: %d\n", NomeVar, valor);
 }
