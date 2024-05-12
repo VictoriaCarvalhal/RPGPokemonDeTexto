@@ -18,7 +18,7 @@ typedef struct pokemon
 } pokemon;
 
 void InicializarPokemon(int cod, pokemon **pokemons, int *Ini, int *numPokemons);
-void InicializarGolpe(int cod, golpe **golpes, int *Ini, int *numGolpes);
+void InicializarGolpe(int n, golpe **golpes, int *Ini, int *numGolpes);
 
 int main()
 {
@@ -26,8 +26,10 @@ int main()
     Ini = numPokemons = 0;
     pokemon *pokemons = NULL;
 
-    printf("Escolha um inicial:\n[1]-Charmander [2]-Squirtle [3]-Bulbasaur\n");
-    scanf("%d", &res);
+
+
+   /*printf("Escolha um inicial:\n[1]-Charmander [2]-Squirtle [3]-Bulbasaur\n");
+   scanf("%d", &res);
 
     while ((res < 1) || (res > 3))
     {
@@ -41,7 +43,12 @@ int main()
     {
         printf("Você escolheu o Charmander!\n");
         InicializarPokemon(res, &pokemons, &Ini, &numPokemons);
-    }
+    }*/
+
+    printf("Escolha um inicial:\n[1]-Pikachu.\n ");
+    scanf("%d", &res);
+
+    InicializarPokemon(res, &pokemons, &Ini, &numPokemons);
 
     for (int i = 0; i < numPokemons; i++)
     {
@@ -49,7 +56,6 @@ int main()
     }
     
     free(pokemons);
-
     return 0;
 }
 
@@ -71,15 +77,17 @@ void InicializarPokemon(int cod, pokemon **pokemons, int *Ini, int *numPokemons)
     if (cod == 1)
     {
         (*pokemons)[*numPokemons].CodPokemon = 1;
-        strcpy((*pokemons)[*numPokemons].NomePokemon, "Charmander");
-        strcpy((*pokemons)[*numPokemons].TipoPokemon, "Fogo");
+        strcpy((*pokemons)[*numPokemons].NomePokemon, "Pikachu");
+        strcpy((*pokemons)[*numPokemons].TipoPokemon, "Eletrico");
         (*pokemons)[*numPokemons].Niv = 0;
         (*pokemons)[*numPokemons].Exp = 0;
         (*pokemons)[*numPokemons].Ataq = 10;
         (*pokemons)[*numPokemons].Def = 5;
         (*pokemons)[*numPokemons].Vida = 15;
+        (*pokemons)[*numPokemons].numGolpes = 0; //mudei aui
+
         printf("Pokemon %d:\n  -Nome:%s\n  -Tipo:%s\n  -Nivel:%d\n  -Exp:%d\n  -Ataq:%d\n  -Def:%d\n  -Vida:%d\n",
-               *numPokemons, (*pokemons)[*numPokemons].NomePokemon, (*pokemons)[*numPokemons].TipoPokemon,
+               *numPokemons + 1, (*pokemons)[*numPokemons].NomePokemon, (*pokemons)[*numPokemons].TipoPokemon,
                (*pokemons)[*numPokemons].Niv, (*pokemons)[*numPokemons].Exp, (*pokemons)[*numPokemons].Ataq,
                (*pokemons)[*numPokemons].Def, (*pokemons)[*numPokemons].Vida);
         InicializarGolpe(i, &((*pokemons)[*numPokemons].SeuGolpe), Ini, &((*pokemons)[*numPokemons].numGolpes));
@@ -88,9 +96,9 @@ void InicializarPokemon(int cod, pokemon **pokemons, int *Ini, int *numPokemons)
     (*numPokemons)++;
 }
 
-void InicializarGolpe(int cod, golpe **golpes, int *Ini, int *numGolpes)
+void InicializarGolpe(int res, golpe **golpes, int *Ini, int *numGolpes)
 {
-    if (*Ini == 0)
+    if (*numGolpes == 0)
     {
         *golpes = (golpe *)malloc(1 * sizeof(golpe));
         if (*golpes == NULL)
@@ -98,10 +106,10 @@ void InicializarGolpe(int cod, golpe **golpes, int *Ini, int *numGolpes)
             printf("Memory allocation failed!\n");
             return;
         }
-        *Ini = 1;
+        *numGolpes = 1;
     }
 
-    if (cod == 0)
+    if (res == 0)
     {
         (*golpes)[*numGolpes].CodGolpe = 1;
         strcpy((*golpes)[*numGolpes].NomeGolpe, "Ataque");
